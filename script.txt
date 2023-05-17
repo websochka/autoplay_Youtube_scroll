@@ -1,0 +1,54 @@
+<!-- div в якому програватиметься наш відеоролик -->
+<div id="video-placeholder"></div>
+
+
+<!-- скрипт автозапуску Youtube при скролінгу  -->
+<script>
+//з'єднуємося з API Youtube
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+function checkPosition(){
+//функція перевірки видимості блоку на jquery
+var div_position = $('#video-placeholder').offset();
+var div_top = div_position.top;
+var div_left = div_position.left;
+var div_width = $('#video-placeholder').width();
+var div_height = $('#video-placeholder').height();
+var top_scroll = $(document).scrollTop();
+var left_scroll = $(document).scrollLeft();
+var screen_width = $(window).width();
+var screen_height = $(window).height()+600;
+var see_x1 = left_scroll;
+var see_x2 = screen_width + left_scroll;
+var see_y1 = top_scroll;
+var see_y2 = screen_height + top_scroll;
+var div_x1 = div_left;
+var div_x2 = div_left + div_height;
+var div_y1 = div_top;
+var div_y2 = div_top + div_width;
+if( div_x1 >= see_x1 && div_x2 <= see_x2 && div_y1 >= see_y1 && div_y2 <= see_y2 ){
+//якщо єлемент видимий на єкрані, запускаємо відео
+player.playVideo();
+}else{
+//інакше ставимо відео на паузу
+player.pauseVideo();
+}
+}
+
+$(document).ready(function() {
+  //активуемо функцію перегляду
+  $(document).scroll(checkPosition);
+  $(window).resize(checkPosition);
+});
+
+function onYouTubeIframeAPIReady() {
+//плеер Youtube
+player = new YT.Player('video-placeholder', {
+width: 600, height: 400, //розмір вікна плееру
+playerVars: { 'autoplay': 0, 'controls': 0, 'showinfo': 0, 'rel': 0}, //тонкі налаштування
+videoId: 'bh3vV_-xYuI', //id відео
+});}
+</script>
